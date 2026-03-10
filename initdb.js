@@ -11,7 +11,6 @@ db.serialize(function(){
   db.run("INSERT INTO Users VALUES (?,?,?)", ['edit1', 'edit1', 'editor']);
   db.run("INSERT INTO Users VALUES (?,?,?)", ['edit2', 'edit2', 'editor']);
 
-  // create an initial table of articles
   db.run("DROP TABLE IF EXISTS Articles");
   db.run("CREATE TABLE Articles (title TEXT, username TEXT, content TEXT)");
   db.run("INSERT INTO Articles VALUES (?,?,?)",
