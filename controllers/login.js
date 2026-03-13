@@ -8,6 +8,46 @@ router.get("/", function(req, res) {
   res.render("login", req.TPL);
 });
 
+// render signup page
+router.get("/signup", function(req, res) {
+  res.render("signup", req.TPL);
+});
+
+// handle signup
+router.post("/createsignup", async function(req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if (!username || username.length < 6) {
+    req.TPL.signup_error = "Error: username must be at least 6 characters long.";
+    return res.render("signup", req.TPL);
+  }
+
+  if (!password || password.length < 6) {
+    req.TPL.signup_error = "Error: password must be at least 6 characters long.";
+    return res.render("signup", req.TPL);
+  }
+
+  try {
+    const existingUser = await usersModel.getUserByUsername(username);
+
+    if (existingUser) {
+      req.TPL.signup_error = "Error: username already exists.";
+      return res.render("signup", req.TPL);
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await usersModel.createUser(username, hashedPassword, "member");
+
+    req.TPL.signup_success = "Success! Account created. You can now log in.";
+    res.render("signup", req.TPL);
+  } catch (err) {
+    console.log(err);
+    req.TPL.signup_error = "Error: could not create account.";
+    res.render("signup", req.TPL);
+  }
+});
+
 // handle login attempt
 router.post("/attemptlogin", async function(req, res) {
   const username = req.body.username;
