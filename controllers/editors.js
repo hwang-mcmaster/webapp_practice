@@ -19,4 +19,22 @@ router.get("/", async function(req, res) {
   }
 });
 
+router.get("/deletearticle/:title", async function(req, res) {
+  try {
+    await articlesModel.deleteArticle(req.params.title);
+    res.redirect("/editors");
+  } catch (err) {
+    console.log(err);
+    req.TPL.error = "Error deleting article.";
+
+    const users = await usersModel.getAllUsers();
+    const articles = await articlesModel.getAllArticles();
+
+    req.TPL.users = users;
+    req.TPL.articles = articles;
+
+    res.render("editors", req.TPL);
+  }
+});
+
 module.exports = router;

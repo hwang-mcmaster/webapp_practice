@@ -1,32 +1,43 @@
 const sqlite3 = require("sqlite3").verbose();
-const sqlite = require("sqlite");
+const db = new sqlite3.Database("database.db");
 
-async function init() {
-  try {
-    db = await sqlite.open({
-      filename: 'database.db',
-      driver: sqlite3.Database
+function getAllArticles() {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM Articles", [], (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
     });
-  } catch(err) {
-      console.error(err);
-  }
+  });
 }
 
-init();
-
-// Return all of the articles
-async function getAllArticles()
-{
-  let results = await db.all("SELECT * FROM Articles");
-  return results;
+function createArticle(title, username, content) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "INSERT INTO Articles VALUES (?, ?, ?)",
+      [title, username, content],
+      function(err) {
+        if (err) reject(err);
+        else resolve();
+      }
+    );
+  });
 }
 
-// Create a new article given a title, content and username
-async function createArticle(article,username)
-{
-  await db.run("INSERT INTO Articles VALUES (?,?,?)",
-         [article.title, username, article.content]);
+function deleteArticle(title) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "DELETE FROM Articles WHERE title = ?",
+      [title],
+      function(err) {
+        if (err) reject(err);
+        else resolve();
+      }
+    );
+  });
 }
 
-module.exports = {getAllArticles
-                 ,createArticle};
+module.exports = {
+  getAllArticles,
+  createArticle,
+  deleteArticle
+};
