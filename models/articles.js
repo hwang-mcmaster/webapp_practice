@@ -36,8 +36,22 @@ function deleteArticle(title) {
   });
 }
 
+function deleteArticlesByUsername(username) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "DELETE FROM Articles WHERE username = ?",
+      [username],
+      function(err) {
+        if (err) reject(err);
+        else resolve();
+      }
+    );
+  });
+}
+
 module.exports = {
   getAllArticles,
   createArticle,
-  deleteArticle
+  deleteArticle,
+  deleteArticlesByUsername
 };

@@ -19,7 +19,7 @@ function createUser(username, password, level) {
     db.run(
       "INSERT INTO Users VALUES (?, ?, ?)",
       [username, password, level],
-      function (err) {
+      function(err) {
         if (err) reject(err);
         else resolve();
       }
@@ -41,7 +41,7 @@ function deleteUser(username) {
     db.run(
       "DELETE FROM Users WHERE username = ?",
       [username],
-      function (err) {
+      function(err) {
         if (err) reject(err);
         else resolve();
       }

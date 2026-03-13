@@ -15,12 +15,14 @@
           <th>Username</th>
           <th>Password</th>
           <th>Level</th>
+          <th>Delete</th>
         </tr>
         {{#users}}
         <tr>
           <td>{{username}}</td>
           <td>{{password}}</td>
           <td>{{level}}</td>
+          <td><a href="/editors/deleteuser/{{username}}">D</a></td>
         </tr>
         {{/users}}
       </table>

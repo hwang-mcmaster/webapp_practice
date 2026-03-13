@@ -37,4 +37,23 @@ router.get("/deletearticle/:title", async function(req, res) {
   }
 });
 
+router.get("/deleteuser/:username", async function(req, res) {
+  try {
+    await articlesModel.deleteArticlesByUsername(req.params.username);
+    await usersModel.deleteUser(req.params.username);
+    res.redirect("/editors");
+  } catch (err) {
+    console.log(err);
+    req.TPL.error = "Error deleting user.";
+
+    const users = await usersModel.getAllUsers();
+    const articles = await articlesModel.getAllArticles();
+
+    req.TPL.users = users;
+    req.TPL.articles = articles;
+
+    res.render("editors", req.TPL);
+  }
+});
+
 module.exports = router;
