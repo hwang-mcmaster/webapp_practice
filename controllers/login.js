@@ -39,7 +39,7 @@ router.post("/createsignup", async function(req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
     await usersModel.createUser(username, hashedPassword, "member");
 
-    req.TPL.signup_success = "Success! Account created. You can now log in.";
+    req.TPL.signup_success = "Success! Your account has been created. Click below to go to the login page.";
     res.render("signup", req.TPL);
   } catch (err) {
     console.log(err);
